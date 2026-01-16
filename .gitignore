@@ -1,0 +1,30 @@
+# Ignore secrets and sensitive files
+.env
+config_gateio.yaml
+config.yaml
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# Logs and data
+*.log
+bot.log
+trades.csv
+daily_stats.csv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
