@@ -43,6 +43,13 @@ class PeriodicReporter:
     
     def _reporter_loop(self):
         """Background loop that sends reports"""
+        # Send first report immediately
+        try:
+            logger.info("Sending initial report...")
+            self.send_report()
+        except Exception as e:
+            logger.error(f"Error sending initial report: {e}")
+        
         while self.running:
             # Wait for next report time
             time.sleep(self.interval_seconds)
@@ -95,7 +102,7 @@ class PeriodicReporter:
         msg += f"**Win Rate:** {stats['win_rate']:.1f}% ({stats['winning_trades']}W / {stats['losing_trades']}L)\n"
         msg += f"**Total P&L:** {pnl_emoji} {sign}${total_pnl:.4f}\n"
         msg += f"**Avg P&L:** ${stats['avg_pnl']:.4f}\n"
-        msg += f"**Total Fees:** ${stats['total_fees']:.4f}\n\n"
+        msg += f"**Avg Hold Time:** {stats['avg_hold_time']:.1f} min\n\n"
         
         # Per-symbol breakdown
         if symbol_perf:
@@ -122,8 +129,10 @@ class PeriodicReporter:
         # Best & Worst trades
         if stats['best_trade'] and stats['worst_trade']:
             msg += "**Extremes:**\n"
-            msg += f"🏆 Best: ${stats['best_trade']:.4f}\n"
-            msg += f"💔 Worst: ${stats['worst_trade']:.4f}\n\n"
+            best = stats['best_trade']
+            worst = stats['worst_trade']
+            msg += f"🏆 Best: {best['symbol']} +${best['pnl_usd']:.4f}\n"
+            msg += f"💔 Worst: {worst['symbol']} ${worst['pnl_usd']:.4f}\n\n"
         
         # Footer
         msg += "="*40 + "\n"

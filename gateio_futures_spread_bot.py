@@ -209,7 +209,13 @@ class GateIOSpreadBot:
                             logger.info(f"{symbol} {position['side'].upper()}: spread={current_spread:.2f}%, exit_threshold={self.trading_manager.exit_spread_threshold}%")
                         
                         # Check if we should exit (pass last_price for P&L calculation)
-                        trade_data = self.trading_manager.check_exit_conditions(symbol, current_spread, last_price)
+                        take_profit_roi = self.config['trading'].get('take_profit_roi', 50.0)
+                        trade_data = self.trading_manager.check_exit_conditions(
+                            symbol, 
+                            current_spread, 
+                            last_price,
+                            take_profit_roi=take_profit_roi
+                        )
                         if trade_data:
                             self.stats['positions_closed'] += 1
                             

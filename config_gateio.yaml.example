@@ -10,7 +10,11 @@ telegram:
 # Spread detection settings
 spread:
   min_threshold: 7.0  # Minimum 7% spread to enter (conservative)
-  # No whitelist - will trade ALL 601 USDT perpetual pairs
+  # Blacklist - symbols to never trade (add problematic coins here)
+  blacklist:
+    - "雪球_USDT"  # Example: problematic coin
+    # - "ANOTHER_USDT"  # Add more as needed
+
 
 # Gate.io API settings (use env vars: GATEIO_API_KEY, GATEIO_API_SECRET)
 gateio:

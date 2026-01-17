@@ -621,6 +621,11 @@ class GateIOTradingManager:
         pnl_data = self.calculate_unrealized_pnl(symbol, exit_price)
         current_roi = pnl_data['roi_pct']
         
+        # Debug logging every N calls (avoid spam)
+        import random
+        if random.random() < 0.05:  # Log 5% of checks
+            logger.info(f"📊 {symbol} {position['side'].upper()}: ROI={current_roi:.1f}%, Target={take_profit_roi}%, P&L=${pnl_data['pnl_usd']:.4f}")
+        
         # PARTIAL TAKE PROFIT: Close 50% if ROI >= take_profit_roi
         if current_roi >= take_profit_roi and position.get('partial_closed') != True:
             logger.info(f"🎯 TAKE PROFIT triggered for {symbol}: ROI={current_roi:.1f}% >= {take_profit_roi}%")
