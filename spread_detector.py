@@ -58,11 +58,12 @@ class SpreadDetector:
                 return None
         
         # Calculate spread in both directions
-        # LONG signal: Mark Price > Last Price (mark price is higher)
-        # SHORT signal: Mark Price < Last Price (mark price is lower)
+        # INVERTED STRATEGY (based on testing - original had 80% loss rate)
+        # SHORT signal: Mark Price > Last Price (was LONG before)
+        # LONG signal: Mark Price < Last Price (was SHORT before)
         
         if mark_price > last_price:
-            # Potential LONG signal
+            # INVERTED: Now SHORT signal (was LONG)
             # Spread = ((mark_price - last_price) / last_price) * 100
             spread_percent = ((mark_price - last_price) / last_price) * 100
             
@@ -73,11 +74,11 @@ class SpreadDetector:
                     mark_price=mark_price,
                     last_price=last_price,
                     spread_percent=spread_percent,
-                    signal_type='LONG'
+                    signal_type='SHORT'  # INVERTED from LONG
                 )
         
         elif mark_price < last_price:
-            # Potential SHORT signal
+            # INVERTED: Now LONG signal (was SHORT)
             # Spread = ((last_price - mark_price) / mark_price) * 100
             spread_percent = ((last_price - mark_price) / mark_price) * 100
             
@@ -88,7 +89,7 @@ class SpreadDetector:
                     mark_price=mark_price,
                     last_price=last_price,
                     spread_percent=spread_percent,
-                    signal_type='SHORT'
+                    signal_type='LONG'  # INVERTED from SHORT
                 )
         
         return None
